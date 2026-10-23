@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:5043
+
+### Listar livros
+GET {{baseUrl}}/api/v1/books
+
+### Criar livro (execute antes das próximas requisições)
+# @name createBook
+POST {{baseUrl}}/api/v1/books
+Content-Type: application/json
+
+{
+  "title": "Dom Casmurro",
+  "author": "Machado de Assis",
+  "description": "Romance brasileiro.",
+  "category": "Romance",
+  "language": "Português",
+  "totalPages": 256
+}
+
+### Consultar o livro criado
+GET {{baseUrl}}/api/v1/books/{{createBook.response.body.$.id}}
+
+### Substituir os dados do livro
+PUT {{baseUrl}}/api/v1/books/{{createBook.response.body.$.id}}
+Content-Type: application/json
+
+{
+  "title": "Dom Casmurro — edição revisada",
+  "author": "Machado de Assis",
+  "description": "Romance brasileiro, nova edição.",
+  "category": "Romance",
+  "language": "Português",
+  "totalPages": 280
+}
+
+### Dados inválidos: 400 com erros por campo
+POST {{baseUrl}}/api/v1/books
+Content-Type: application/json
+
+{
+  "title": "",
+  "totalPages": 0
+}
+
+### Excluir o livro criado
+DELETE {{baseUrl}}/api/v1/books/{{createBook.response.body.$.id}}
+
+### Consultar depois de excluir: 404
+GET {{baseUrl}}/api/v1/books/{{createBook.response.body.$.id}}
